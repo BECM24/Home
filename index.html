@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BECM-24 Student Directory</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #F4F6F8;
+            --card: #FFFFFF;
+            --ink: #1B2733;
+            --ink-soft: #5B6B7A;
+            --steel: #2E5F76;
+            --steel-deep: #1F4358;
+            --line: #E1E6EB;
+            --grid: rgba(46, 95, 118, 0.05);
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            color: var(--ink);
+            background-color: var(--bg);
+            background-image:
+                linear-gradient(var(--grid) 1px, transparent 1px),
+                linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        header {
+            padding: 64px 24px 40px;
+            text-align: center;
+            border-bottom: 1px solid var(--line);
+            background: linear-gradient(180deg, rgba(255,255,255,0.6), rgba(255,255,255,0));
+        }
+
+        .eyebrow {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.75em;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--steel);
+            margin-bottom: 14px;
+        }
+
+        h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 2.6em;
+            letter-spacing: -0.01em;
+            margin: 0 0 10px;
+            color: var(--ink);
+        }
+
+        .subtitle {
+            color: var(--ink-soft);
+            font-size: 1em;
+            margin: 0;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 22px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 48px 24px 80px;
+        }
+
+        .card {
+            background: var(--card);
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 28px 20px 22px;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px -8px rgba(31, 67, 88, 0.18);
+            border-color: var(--steel);
+        }
+
+        .card-media {
+            width: 128px;
+            height: 128px;
+            border-radius: 50%;
+            overflow: hidden;
+            background: #EDF1F4;
+            border: 3px solid var(--steel);
+            box-shadow: 0 4px 10px -2px rgba(31, 67, 88, 0.25);
+            flex-shrink: 0;
+        }
+
+        .profile-pic {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .card-body {
+            width: 100%;
+            padding-top: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .roll-tag {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.72em;
+            letter-spacing: 0.04em;
+            color: #fff;
+            background: var(--steel);
+            padding: 3px 10px;
+            border-radius: 20px;
+            margin-bottom: 10px;
+        }
+
+        .name {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.08em;
+            font-weight: 600;
+            margin: 0 0 16px;
+            color: var(--ink);
+            line-height: 1.3;
+        }
+
+        .actions {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none;
+            color: #fff;
+            padding: 9px 16px;
+            border-radius: 6px;
+            font-size: 0.9em;
+            font-weight: 500;
+            transition: background-color 0.2s ease;
+        }
+
+        .btn-fb { background-color: var(--steel-deep); }
+        .btn-fb:hover { background-color: var(--steel); }
+
+        .btn-email { background-color: #fff; color: var(--steel-deep); border: 1.5px solid var(--line); }
+        .btn-email:hover { border-color: var(--steel); color: var(--steel); background-color: #F4F6F8; }
+
+        .icon { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 1.8; flex-shrink: 0; }
+        .btn-fb .icon { fill: currentColor; stroke: none; }
+
+        footer {
+            text-align: center;
+            padding: 28px 24px 48px;
+            color: var(--ink-soft);
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.75em;
+            letter-spacing: 0.04em;
+        }
+
+        .help-section {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 8px 24px 64px;
+            text-align: center;
+        }
+
+        .help-section .eyebrow {
+            margin-bottom: 12px;
+        }
+
+        .help-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 1.7em;
+            margin: 0 0 32px;
+            color: var(--ink);
+        }
+
+        .help-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 320px));
+            gap: 22px;
+            justify-content: center;
+        }
+
+        .help-card {
+            background: var(--card);
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: 26px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+        }
+
+        .help-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px -8px rgba(31, 67, 88, 0.18);
+            border-color: var(--steel);
+        }
+
+        .help-media {
+            width: 96px;
+            height: 96px;
+            border-radius: 50%;
+            overflow: hidden;
+            background: #EDF1F4;
+            border: 3px solid var(--steel);
+            box-shadow: 0 4px 10px -2px rgba(31, 67, 88, 0.25);
+            flex-shrink: 0;
+        }
+
+        .help-pic {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .help-name {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.08em;
+            font-weight: 600;
+            margin: 16px 0 4px;
+            color: var(--ink);
+        }
+
+        .help-sub {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.72em;
+            letter-spacing: 0.03em;
+            color: var(--ink-soft);
+        }
+
+        @media (max-width: 480px) {
+            h1 { font-size: 2em; }
+            header { padding: 48px 20px 32px; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="eyebrow">Department of Building Engineering &amp; Construction Management &middot; RUET</div>
+        <h1>BECM-24 Student Directory</h1>
+        <p class="subtitle">2024-2025</p>
+    </header>
+
+    <div class="container">
+
+        <article class="card">
+            <div class="card-media">
+                <img src="./2412001.jpg" alt="Mst.Jannatun Ferdus Jui's Picture" class="profile-pic" loading="lazy">
+            </div>
+            <div class="card-body">
+                <span class="roll-tag">2412001</span>
+                <h2 class="name">Mst.Jannatun Ferdus Jui</h2>
+                <div class="actions">
+                    <a href="https://www.facebook.com/share/1BNYMXkv3Q/" target="_blank" rel="noopener" class="btn btn-fb">
+                        <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M22 12.06C22 6.51 17.52 2 12 2S2 6.51 2 12.06c0 5.02 3.66 9.18 8.44 9.94v-7.03H7.9v-2.91h2.54V9.85c0-2.51 1.49-3.9 3.77-3.9 1.09 0 2.23.2 2.23.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.87h2.78l-.44 2.91h-2.34V22c4.78-.76 8.44-4.92 8.44-9.94Z"/></svg>
+                        Profile
+                    </a>
+                    <a href="mailto:jannatunferdusjui@gmail.com" class="btn btn-email">
+                        <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M2 6a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6Zm2 0 8 6 8-6"/></svg>
+                        Email
+                    </a>
+                </div>
+            </div>
+        </article>
+
+        <article class="card">
+            <div class="card-media">
+                <img src="./2412003.jpg" alt="Student Picture" class="profile-pic" loading="lazy">
+            </div>
+            <div class="card-body">
+                <span class="roll-tag">2412003</span>
+                <h2 class="name">Irfan Hossain Alvi</h2>
+                <div class="actions">
+                    <a href="https://www.facebook.com/share/1CfiY9QBKp/?mibextid=wwXIfr" target="_blank" rel="noopener" class="btn btn-fb">
+                        <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M22 12.06C22 6.51 17.52 2 12 2S2 6.51 2 12.06c0 5.02 3.66 9.18 8.44 9.94v-7.03H7.9v-2.91h2.54V9.85c0-2.51 1.49-3.9 3.77-3.9 1.09 0 2.23.2 2.23.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.87h2.78l-.44 2.91h-2.34V22c4.78-.76 8.44-4.92 8.44-9.94Z"/></svg>
+                        Profile
+                    </a>
+                    <a href="mailto:irfan.hossain.ruet24@gmail.com" class="btn btn-email">
+                        <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M2 6a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6Zm2 0 8 6 8-6"/></svg>
+                        Email
+                    </a>
+                </div>
+            </div>
+        </article>
+
+        <article class="card">
+            <div class="card-media">
+                <img src="./2412005.jpg" alt="Student Picture" class="profile-pic" loading="lazy">
+            </div>
+            <div class="card-body">
+                <span class="roll-tag">2412005</span>
+                <h2 class="name">Md. Mahbubur Rahman</h2>
+                <div class="actions">
+                    <a href="https://www.facebook.com/mahbuburrahman.64" target="_blank" rel="noopener" class="btn btn-fb">
+                        <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M22 12.06C22 6.51 17.52 2 12 2S2 6.51 2 12.06c0 5.02 3.66 9.18 8.44 9.94v-7.03H7.9v-2.91h2.54V9.85c0-2.51 1.49-3.9 3.77-3.9 1.09 0 2.23.2 2.23.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.87h2.78l-.44 2.91h-2.34V22c4.78-.76 8.44-4.92 8.44-9.94Z"/></svg>
+                        Profile
+                    </a>
+                    <a href="mailto:mahbubur0rahman64@gmail.com" class="btn btn-email">
+                        <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M2 6a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6Zm2 0 8 6 8-6"/></svg>
+                        Email
+                    </a>
+                </div>
+            </div>
+        </article>
+
+        <article class="card">
+            <div class="card-media">
+                <img src="./2412006.jpg" alt="Student Picture" class="profile-pic" loading="lazy">
+            </div>
+            <div class="card-body">
+                <span class="roll-tag">2412006</span>
+                <h2 class="name">Nazmul Haque</h2>
+                <div class="actions">
+                    <a href="https://www.facebook.com/share/1HhXPhYUPX/" target="_blank" rel="noopener" class="btn btn-fb">
+                        <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M22 12.06C22 6.51 17.52 2 12 2S2 6.51 2 12.06c0 5.02 3.66 9.18 8.44 9.94v-7.03H7.9v-2.91h2.54V9.85c0-2.51 1.49-3.9 3.77-3.9 1.09 0 2.23.2 2.23.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.87h2.78l-.44 2.91h-2.34V22c4.78-.76 8.44-4.92 8.44-9.94Z"/></svg>
+                        Profile
+                    </a>
+                    <a href="mailto:mdnazmul4623@gmail.com" class="btn btn-email">
+                        <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M2 6a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6Zm2 0 8 6 8-6"/></svg>
+                        Email
+                    </a>
+                </div>
+            </div>
+        </article>
+
+        <article class="card">
+            <div class="card-media">
+                <img src="./2412007.jpg" alt="Student Picture" class="profile-pic" loading="lazy">
+            </div>
+            <div class="card-body">
+                <span class="roll-tag">2412007</span>
+                <h2 class="name">A. K. M. Arfan Ashfia</h2>
+                <div class="actions">
+                    <a href="https://www.facebook.com/share/17VKWZYcV5/" target="_blank" rel="noopener" class="btn btn-fb">
+                        <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M22 12.06C22 6.51 17.52 2 12 2S2 6.51 2 12.06c0 5.02 3.66 9.18 8.44 9.94v-7.03H7.9v-2.91h2.54V9.85c0-2.51 1.49-3.9 3.77-3.9 1.09 0 2.23.2 2.23.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.87h2.78l-.44 2.91h-2.34V22c4.78-.76 8.44-4.92 8.44-9.94Z"/></svg>
+                        Profile
+                    </a>
+                    <a href="mailto:arfan.ashfia83@gmail.com" class="btn btn-email">
+                        <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M2 6a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6Zm2 0 8 6 8-6"/></svg>
+                        Email
+                    </a>
+                </div>
+            </div>
+        </article>
+
+        <article class="card">
+            <div class="card-media">
+                <img src="./2412008.jpg" alt="Student Picture" class="profile-pic" loading="lazy">
+            </div>
+            <div class="card-body">
+                <span class="roll-tag">2412008</span>
+                <h2 class="name">Asma Azom Nisat</h2>
+                <div class="actions">
+                    <a href="https://www.facebook.com/nis.ha.779160" target="_blank" rel="noopener" class="btn btn-fb">
+                        <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M22 12.06C22 6.51 17.52 2 12 2S2 6.51 2 12.06c0 5.02 3.66 9.18 8.44 9.94v-7.03H7.9v-2.91h2.54V9.85c0-2.51 1.49-3.9 3.77-3.9 1.09 0 2.23.2 2.23.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.87h2.78l-.44 2.91h-2.34V22c4.78-.76 8.44-4.92 8.44-9.94Z"/></svg>
+                        Profile
+                    </a>
+                    <a href="mailto:asmaazom122@gmail.com" class="btn btn-email">
+                        <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M2 6a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6Zm2 0 8 6 8-6"/></svg>
+                        Email
+                    </a>
+                </div>
+            </div>
+        </article>
+
+        <article class="card">
+            <div class="card-media">
+                <img src="./2412009.jpg" alt="Student Picture" class="profile-pic" loading="lazy">
+            </div>
+            <div class="card-body">
+                <span class="roll-tag">2412009</span>
+                <h2 class="name">Md Milon Mia</h2>
+                <div class="actions">
+                    <a href="https://www.facebook.com/share/1HnNm5GpAd/" target="_blank" rel="noopener" class="btn btn-fb">
+                        <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M22 12.06C22 6.51 17.52 2 12 2S2 6.51 2 12.06c0 5.02 3.66 9.18 8.44 9.94v-7.03H7.9v-2.91h2.54V9.85c0-2.51 1.49-3.9 3.77-3.9 1.09 0 2.23.2 2.23.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.87h2.78l-.44 2.91h-2.34V22c4.78-.76 8.44-4.92 8.44-9.94Z"/></svg>
+                        Profile
+                    </a>
+                    <a href="mailto:mdmoniruzzamanmilon34@gmail.com" class="btn btn-email">
+                        <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M2 6a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6Zm2 0 8 6 8-6"/></svg>
+                        Email
+                    </a>
+                </div>
+            </div>
+        </article>
+
+        <article class="card">
+            <div class="card-media">
+                <img src="./2412010.jpg" alt="Student Picture" class="profile-pic" loading="lazy">
+            </div>
+            <div class="card-body">
+                <span class="roll-tag">2412010</span>
+                <h2 class="name">Md.Imteyaz Sheikh</h2>
+                <div class="actions">
+                    <a href="https://www.facebook.com/share/18ZgeAf9yT/" target="_blank" rel="noopener" class="btn btn-fb">
+                        <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M22 12.06C22 6.51 17.52 2 12 2S2 6.51 2 12.06c0 5.02 3.66 9.18 8.44 9.94v-7.03H7.9v-2.91h2.54V9.85c0-2.51 1.49-3.9 3.77-3.9 1.09 0 2.23.2 2.23.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.87h2.78l-.44 2.91h-2.34V22c4.78-.76 8.44-4.92 8.44-9.94Z"/></svg>
+                        Profile
+                    </a>
+                    <a href="mailto:imteyazemaz@gmail.com" class="btn btn-email">
+                        <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M2 6a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6Zm2 0 8 6 8-6"/></svg>
+                        Email
+                    </a>
+                </div>
+            </div>
+        </article>
+
+        <article class="card">
+            <div class="card-media">
+                <img src="./2412011.jpg" alt="Student Picture" class="profile-pic" loading="lazy">
+            </div>
+            <div class="card-body">
+                <span class="roll-tag">2412011</span>
+                <h2 class="name">Md. Safiul Islam</h2>
+                <div class="actions">
+                    <a href="https://www.facebook.com/share/17bnfXPRxh/" target="_blank" rel="noopener" class="btn btn-fb">
+                        <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M22 12.06C22 6.51 17.52 2 12 2S2 6.51 2 12.06c0 5.02 3.66 9.18 8.44 9.94v-7.03H7.9v-2.91h2.54V9.85c0-2.51 1.49-3.9 3.77-3.9 1.09 0 2.23.2 2.23.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.87h2.78l-.44 2.91h-2.34V22c4.78-.76 8.44-4.92 8.44-9.94Z"/></svg>
+                        Profile
+                    </a>
+                    <a href="mailto:mdsaifulislam33212@gmail.com" class="btn btn-email">
+                        <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M2 6a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6Zm2 0 8 6 8-6"/></svg>
+                        Email
+                    </a>
+                </div>
+            </div>
+        </article>
+
+        <article class="card">
+            <div class="card-media">
+                <img src="./2412012.jpg" alt="Student Picture" class="profile-pic" loading="lazy">
+            </div>
+            <div class="card-body">
+                <span class="roll-tag">2412012</span>
+                <h2 class="name">Tanzim Hasan Tonoy</h2>
+                <div class="actions">
+                    <a href="https://www.facebook.com/share/1ZuEKMtyWL/" target="_blank" rel="noopener" class="btn btn-fb">
+                        <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M22 12.06C22 6.51 17.52 2 12 2S2 6.51 2 12.06c0 5.02 3.66 9.18 8.44 9.94v-7.03H7.9v-2.91h2.54V9.85c0-2.51 1.49-3.9 3.77-3.9 1.09 0 2.23.2 2.23.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.87h2.78l-.44 2.91h-2.34V22c4.78-.76 8.44-4.92 8.44-9.94Z"/></svg>
+                        Profile
+                    </a>
+                    <a href="mailto:tonoytalukder37@gmail.com" class="btn btn-email">
+                        <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M2 6a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6Zm2 0 8 6 8-6"/></svg>
+                        Email
+                    </a>
+                </div>
+            </div>
+        </article>
+
+        <article class="card">
+            <div class="card-media">
+                <img src="./2412013.jpg" alt="Esraf Anjir's Picture" class="profile-pic" loading="lazy">
+            </div>
+            <div class="card-body">
+                <span class="roll-tag">2412013</span>
+                <h2 class="name">Esraf Anjir</h2>
+                <div class="actions">
+                    <a href="https://www.facebook.com/esraf.anjir.nahid.2025" target="_blank" rel="noopener" class="btn btn-fb">
+                        <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M22 12.06C22 6.51 17.52 2 12 2S2 6.51 2 12.06c0 5.02 3.66 9.18 8.44 9.94v-7.03H7.9v-2.91h2.54V9.85c0-2.51 1.49-3.9 3.77-3.9 1.09 0 2.23.2 2.23.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.87h2.78l-.44 2.91h-2.34V22c4.78-.76 8.44-4.92 8.44-9.94Z"/></svg>
+                        Profile
+                    </a>
+                    <a href="mailto:esrafnahid@gmail.com" class="btn btn-email">
+                        <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M2 6a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6Zm2 0 8 6 8-6"/></svg>
+                        Email
+                    </a>
+                </div>
+            </div>
+        </article>
+
+        <article class="card">
+            <div class="card-media">
+                <img src="./2412014.jpg" alt="Md.Rafiqul Hoque's Picture" class="profile-pic" loading="lazy">
+            </div>
+            <div class="card-body">
+                <span class="roll-tag">2412014</span>
+                <h2 class="name">Md.Rafiqul Hoque</h2>
+                <div class="actions">
+                    <a href="https://www.facebook.com/mdrafiqul.hoque.963" target="_blank" rel="noopener" class="btn btn-fb">
+                        <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M22 12.06C22 6.51 17.52 2 12 2S2 6.51 2 12.06c0 5.02 3.66 9.18 8.44 9.94v-7.03H7.9v-2.91h2.54V9.85c0-2.51 1.49-3.9 3.77-3.9 1.09 0 2.23.2 2.23.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.87h2.78l-.44 2.91h-2.34V22c4.78-.76 8.44-4.92 8.44-9.94Z"/></svg>
+                        Profile
+                    </a>
+                    <a href="mailto:mdrafiqulhoque14@gmail.com" class="btn btn-email">
+                        <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M2 6a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6Zm2 0 8 6 8-6"/></svg>
+                        Email
+                    </a>
+                </div>
+            </div>
+        </article>
+
+        <article class="card">
+            <div class="card-media">
+                <img src="./2412015.jpg" alt="Md. Sajeeb Hosen's Picture" class="profile-pic" loading="lazy">
+            </div>
+            <div class="card-body">
+                <span class="roll-tag">2412015</span>
+                <h2 class="name">Md. Sajeeb Hosen</h2>
+                <div class="actions">
+                    <a href="https://www.facebook.com/md.sajeeb.hosen.449457" target="_blank" rel="noopener" class="btn btn-fb">
+                        <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M22 12.06C22 6.51 17.52 2 12 2S2 6.51 2 12.06c0 5.02 3.66 9.18 8.44 9.94v-7.03H7.9v-2.91h2.54V9.85c0-2.51 1.49-3.9 3.77-3.9 1.09 0 2.23.2 2.23.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.87h2.78l-.44 2.91h-2.34V22c4.78-.76 8.44-4.92 8.44-9.94Z"/></svg>
+                        Profile
+                    </a>
+                    <a href="mailto:merukirus@gmail.com" class="btn btn-email">
+                        <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M2 6a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6Zm2 0 8 6 8-6"/></svg>
+                        Email
+                    </a>
+                </div>
+            </div>
+        </article>
+
+        <article class="card">
+            <div class="card-media">
+                <img src="./2412016.jpg" alt="MD. Imran hasan's Picture" class="profile-pic" loading="lazy">
+            </div>
+            <div class="card-body">
+                <span class="roll-tag">2412016</span>
+                <h2 class="name">MD. Imran hasan</h2>
+                <div class="actions">
+                    <a href="https://www.facebook.com/profile.php?fb_profile_edit_entry_point=%7B%22click_point%22%3A%22edit_profile_button%22%2C%22feature%22%3A%22profile_header%22%7D&id=100035339981958&sk=about" target="_blank" rel="noopener" class="btn btn-fb">
+                        <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M22 12.06C22 6.51 17.52 2 12 2S2 6.51 2 12.06c0 5.02 3.66 9.18 8.44 9.94v-7.03H7.9v-2.91h2.54V9.85c0-2.51 1.49-3.9 3.77-3.9 1.09 0 2.23.2 2.23.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.87h2.78l-.44 2.91h-2.34V22c4.78-.76 8.44-4.92 8.44-9.94Z"/></svg>
+                        Profile
+                    </a>
+                    <a href="mailto:imhemonhasan63.5@gmail.com" class="btn btn-email">
+                        <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M2 6a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6Zm2 0 8 6 8-6"/></svg>
+                        Email
+                    </a>
+                </div>
+            </div>
+        </article>
+
+        <article class="card">
+            <div class="card-media">
+                <img src="./2412017.jpg" alt="Tribani Paul Roshmi's Picture" class="profile-pic" loading="lazy">
+            </div>
+            <div class="card-body">
+                <span class="roll-tag">2412017</span>
+                <h2 class="name">Tribani Paul Roshmi</h2>
+                <div class="actions">
+                    <a href="https://www.facebook.com/share/1ArAye1Nqa/" target="_blank" rel="noopener" class="btn btn-fb">
+                        <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M22 12.06C22 6.51 17.52 2 12 2S2 6.51 2 12.06c0 5.02 3.66 9.18 8.44 9.94v-7.03H7.9v-2.91h2.54V9.85c0-2.51 1.49-3.9 3.77-3.9 1.09 0 2.23.2 2.23.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.87h2.78l-.44 2.91h-2.34V22c4.78-.76 8.44-4.92 8.44-9.94Z"/></svg>
+                        Profile
+                    </a>
+                    <a href="mailto:tribani2005@gmail.com" class="btn btn-email">
+                        <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M2 6a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6Zm2 0 8 6 8-6"/></svg>
+                        Email
+                    </a>
+                </div>
+            </div>
+        </article>
+
+        <article class="card">
+            <div class="card-media">
+                <img src="./2412019.jpg" alt="Student Picture" class="profile-pic" loading="lazy">
+            </div>
+            <div class="card-body">
+                <span class="roll-tag">2412019</span>
+                <h2 class="name">MD. Riyad Sarkar</h2>
+                <div class="actions">
+                    <a href="https://www.facebook.com/share/1JY4vnVS7y/" target="_blank" rel="noopener" class="btn btn-fb">
+                        <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M22 12.06C22 6.51 17.52 2 12 2S2 6.51 2 12.06c0 5.02 3.66 9.18 8.44 9.94v-7.03H7.9v-2.91h2.54V9.85c0-2.51 1.49-3.9 3.77-3.9 1.09 0 2.23.2 2.23.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.87h2.78l-.44 2.91h-2.34V22c4.78-.76 8.44-4.92 8.44-9.94Z"/></svg>
+                        Profile
+                    </a>
+                    <a href="mailto:mdriyadsarkar52@gmail.com" class="btn btn-email">
+                        <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M2 6a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6Zm2 0 8 6 8-6"/></svg>
+                        Email
+                    </a>
+                </div>
+            </div>
+        </article>
+
+        <article class="card">
+            <div class="card-media">
+                <img src="./2412020.jpg" alt="Student Picture" class="profile-pic" loading="lazy">
+            </div>
+            <div class="card-body">
+                <span class="roll-tag">2412020</span>
+                <h2 class="name">Md. Tanzid Alam</h2>
+                <div class="actions">
+                    <a href="https://www.facebook.com/share/17ZVjvQZpp/" target="_blank" rel="noopener" class="btn btn-fb">
+                        <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M22 12.06C22 6.51 17.52 2 12 2S2 6.51 2 12.06c0 5.02 3.66 9.18 8.44 9.94v-7.03H7.9v-2.91h2.54V9.85c0-2.51 1.49-3.9 3.77-3.9 1.09 0 2.23.2 2.23.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.87h2.78l-.44 2.91h-2.34V22c4.78-.76 8.44-4.92 8.44-9.94Z"/></svg>
+                        Profile
+                    </a>
+                    <a href="mailto:tanzidalam17@gmail.com" class="btn btn-email">
+                        <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M2 6a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6Zm2 0 8 6 8-6"/></svg>
+                        Email
+                    </a>
+                </div>
+            </div>
+        </article>
+
+        <article class="card">
+            <div class="card-media">
+                <img src="./2412021.jpg" alt="Student Picture" class="profile-pic" loading="lazy">
+            </div>
+            <div class="card-body">
+                <span class="roll-tag">2412021</span>
+                <h2 class="name">Mahmudur Rahman Ador</h2>
+                <div class="actions">
+                    <a href="https://www.facebook.com/share/18MVX27gSU/?mibextid=wwXIfr" target="_blank" rel="noopener" class="btn btn-fb">
+                        <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M22 12.06C22 6.51 17.52 2 12 2S2 6.51 2 12.06c0 5.02 3.66 9.18 8.44 9.94v-7.03H7.9v-2.91h2.54V9.85c0-2.51 1.49-3.9 3.77-3.9 1.09 0 2.23.2 2.23.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.87h2.78l-.44 2.91h-2.34V22c4.78-.76 8.44-4.92 8.44-9.94Z"/></svg>
+                        Profile
+                    </a>
+                    <a href="mailto:mahmudurador@gmail.com" class="btn btn-email">
+                        <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M2 6a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6Zm2 0 8 6 8-6"/></svg>
+                        Email
+                    </a>
+                </div>
+            </div>
+        </article>
+
+        <article class="card">
+            <div class="card-media">
+                <img src="./2412022.jpg" alt="Student Picture" class="profile-pic" loading="lazy">
+            </div>
+            <div class="card-body">
+                <span class="roll-tag">2412022</span>
+                <h2 class="name">UMMY AKIBA BARNO</h2>
+                <div class="actions">
+                    <a href="https://www.facebook.com/share/1HbuZFTMTB/" target="_blank" rel="noopener" class="btn btn-fb">
+                        <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M22 12.06C22 6.51 17.52 2 12 2S2 6.51 2 12.06c0 5.02 3.66 9.18 8.44 9.94v-7.03H7.9v-2.91h2.54V9.85c0-2.51 1.49-3.9 3.77-3.9 1.09 0 2.23.2 2.23.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.87h2.78l-.44 2.91h-2.34V22c4.78-.76 8.44-4.92 8.44-9.94Z"/></svg>
+                        Profile
+                    </a>
+                    <a href="mailto:ummyakibabarno2005@gmail.com" class="btn btn-email">
+                        <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M2 6a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6Zm2 0 8 6 8-6"/></svg>
+                        Email
+                    </a>
+                </div>
+            </div>
+        </article>
+
+        <article class="card">
+            <div class="card-media">
+                <img src="./2412023.jpg" alt="Student Picture" class="profile-pic" loading="lazy">
+            </div>
+            <div class="card-body">
+                <span class="roll-tag">2412023</span>
+                <h2 class="name">Ashikur Rahman</h2>
+                <div class="actions">
+                    <a href="https://www.facebook.com/share/1AycuSMTCQ/" target="_blank" rel="noopener" class="btn btn-fb">
+                        <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M22 12.06C22 6.51 17.52 2 12 2S2 6.51 2 12.06c0 5.02 3.66 9.18 8.44 9.94v-7.03H7.9v-2.91h2.54V9.85c0-2.51 1.49-3.9 3.77-3.9 1.09 0 2.23.2 2.23.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.87h2.78l-.44 2.91h-2.34V22c4.78-.76 8.44-4.92 8.44-9.94Z"/></svg>
+                        Profile
+                    </a>
+                    <a href="mailto:ashikurrahman64105@gmail.com" class="btn btn-email">
+                        <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M2 6a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6Zm2 0 8 6 8-6"/></svg>
+                        Email
+                    </a>
+                </div>
+            </div>
+        </article>
+
+        <article class="card">
+            <div class="card-media">
+                <img src="./2412024.jpg" alt="Student Picture" class="profile-pic" loading="lazy">
+            </div>
+            <div class="card-body">
+                <span class="roll-tag">2412024</span>
+                <h2 class="name">Parthiv Paul Apurba</h2>
+                <div class="actions">
+                    <a href="https://www.facebook.com/share/18CmvxgxSj/" target="_blank" rel="noopener" class="btn btn-fb">
+                        <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M22 12.06C22 6.51 17.52 2 12 2S2 6.51 2 12.06c0 5.02 3.66 9.18 8.44 9.94v-7.03H7.9v-2.91h2.54V9.85c0-2.51 1.49-3.9 3.77-3.9 1.09 0 2.23.2 2.23.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.87h2.78l-.44 2.91h-2.34V22c4.78-.76 8.44-4.92 8.44-9.94Z"/></svg>
+                        Profile
+                    </a>
+                    <a href="mailto:parthivpaul21@gmail.com" class="btn btn-email">
+                        <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M2 6a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6Zm2 0 8 6 8-6"/></svg>
+                        Email
+                    </a>
+                </div>
+            </div>
+        </article>
+
+        <article class="card">
+            <div class="card-media">
+                <img src="./2412025.jpg" alt="Student Picture" class="profile-pic" loading="lazy">
+            </div>
+            <div class="card-body">
+                <span class="roll-tag">2412025</span>
+                <h2 class="name">Imran Rasel</h2>
+                <div class="actions">
+                    <a href="https://www.facebook.com/share/1EDGp5TjEz/" target="_blank" rel="noopener" class="btn btn-fb">
+                        <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M22 12.06C22 6.51 17.52 2 12 2S2 6.51 2 12.06c0 5.02 3.66 9.18 8.44 9.94v-7.03H7.9v-2.91h2.54V9.85c0-2.51 1.49-3.9 3.77-3.9 1.09 0 2.23.2 2.23.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.87h2.78l-.44 2.91h-2.34V22c4.78-.76 8.44-4.92 8.44-9.94Z"/></svg>
+                        Profile
+                    </a>
+                    <a href="mailto:imranhossainrasel123@gmail.com" class="btn btn-email">
+                        <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M2 6a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6Zm2 0 8 6 8-6"/></svg>
+                        Email
+                    </a>
+                </div>
+            </div>
+        </article>
+
+        <article class="card">
+            <div class="card-media">
+                <img src="./2412026.jpg" alt="Student Picture" class="profile-pic" loading="lazy">
+            </div>
+            <div class="card-body">
+                <span class="roll-tag">2412026</span>
+                <h2 class="name">Toufikur Rahman Efaz</h2>
+                <div class="actions">
+                    <a href="https://www.facebook.com/share/1PKsyGzp1w/" target="_blank" rel="noopener" class="btn btn-fb">
+                        <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M22 12.06C22 6.51 17.52 2 12 2S2 6.51 2 12.06c0 5.02 3.66 9.18 8.44 9.94v-7.03H7.9v-2.91h2.54V9.85c0-2.51 1.49-3.9 3.77-3.9 1.09 0 2.23.2 2.23.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.87h2.78l-.44 2.91h-2.34V22c4.78-.76 8.44-4.92 8.44-9.94Z"/></svg>
+                        Profile
+                    </a>
+                    <a href="mailto:toufikurrahmanefaz781@gmail.com" class="btn btn-email">
+                        <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M2 6a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6Zm2 0 8 6 8-6"/></svg>
+                        Email
+                    </a>
+                </div>
+            </div>
+        </article>
+
+        <article class="card">
+            <div class="card-media">
+                <img src="./2412027.jpg" alt="Student Picture" class="profile-pic" loading="lazy">
+            </div>
+            <div class="card-body">
+                <span class="roll-tag">2412027</span>
+                <h2 class="name">Jobayer Ahmed</h2>
+                <div class="actions">
+                    <a href="https://www.facebook.com/share/1AvaQsbM5a/" target="_blank" rel="noopener" class="btn btn-fb">
+                        <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M22 12.06C22 6.51 17.52 2 12 2S2 6.51 2 12.06c0 5.02 3.66 9.18 8.44 9.94v-7.03H7.9v-2.91h2.54V9.85c0-2.51 1.49-3.9 3.77-3.9 1.09 0 2.23.2 2.23.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.87h2.78l-.44 2.91h-2.34V22c4.78-.76 8.44-4.92 8.44-9.94Z"/></svg>
+                        Profile
+                    </a>
+                    <a href="mailto:jobayera01522@gmail.com" class="btn btn-email">
+                        <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M2 6a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6Zm2 0 8 6 8-6"/></svg>
+                        Email
+                    </a>
+                </div>
+            </div>
+        </article>
+
+        <article class="card">
+            <div class="card-media">
+                <img src="./2412028.jpg" alt="Student Picture" class="profile-pic" loading="lazy">
+            </div>
+            <div class="card-body">
+                <span class="roll-tag">2412028</span>
+                <h2 class="name">Mazba Ul Haque Madhurjo</h2>
+                <div class="actions">
+                    <a href="https://www.facebook.com/share/1DpvS3jRZr/" target="_blank" rel="noopener" class="btn btn-fb">
+                        <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M22 12.06C22 6.51 17.52 2 12 2S2 6.51 2 12.06c0 5.02 3.66 9.18 8.44 9.94v-7.03H7.9v-2.91h2.54V9.85c0-2.51 1.49-3.9 3.77-3.9 1.09 0 2.23.2 2.23.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.87h2.78l-.44 2.91h-2.34V22c4.78-.76 8.44-4.92 8.44-9.94Z"/></svg>
+                        Profile
+                    </a>
+                    <a href="mailto:mazbaul3.14@gmail.com" class="btn btn-email">
+                        <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M2 6a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6Zm2 0 8 6 8-6"/></svg>
+                        Email
+                    </a>
+                </div>
+            </div>
+        </article>
+
+        <article class="card">
+            <div class="card-media">
+                <img src="./2412029.jpg" alt="Student Picture" class="profile-pic" loading="lazy">
+            </div>
+            <div class="card-body">
+                <span class="roll-tag">2412029</span>
+                <h2 class="name">S. M. Mahi Reza Rishat</h2>
+                <div class="actions">
+                    <a href="https://www.facebook.com/share/1DXZYvcPNJ/" target="_blank" rel="noopener" class="btn btn-fb">
+                        <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M22 12.06C22 6.51 17.52 2 12 2S2 6.51 2 12.06c0 5.02 3.66 9.18 8.44 9.94v-7.03H7.9v-2.91h2.54V9.85c0-2.51 1.49-3.9 3.77-3.9 1.09 0 2.23.2 2.23.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.87h2.78l-.44 2.91h-2.34V22c4.78-.76 8.44-4.92 8.44-9.94Z"/></svg>
+                        Profile
+                    </a>
+                    <a href="mailto:smrishat009@gmail.com" class="btn btn-email">
+                        <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M2 6a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6Zm2 0 8 6 8-6"/></svg>
+                        Email
+                    </a>
+                </div>
+            </div>
+        </article>
+
+        <article class="card">
+            <div class="card-media">
+                <img src="./2412030.jpg" alt="Student Picture" class="profile-pic" loading="lazy">
+            </div>
+            <div class="card-body">
+                <span class="roll-tag">2412030</span>
+                <h2 class="name">Fatima Rahman Sadia</h2>
+                <div class="actions">
+                    <a href="https://www.facebook.com/share/1H6ypZBV3w/" target="_blank" rel="noopener" class="btn btn-fb">
+                        <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M22 12.06C22 6.51 17.52 2 12 2S2 6.51 2 12.06c0 5.02 3.66 9.18 8.44 9.94v-7.03H7.9v-2.91h2.54V9.85c0-2.51 1.49-3.9 3.77-3.9 1.09 0 2.23.2 2.23.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.87h2.78l-.44 2.91h-2.34V22c4.78-.76 8.44-4.92 8.44-9.94Z"/></svg>
+                        Profile
+                    </a>
+                    <a href="mailto:fatimarahman.sadia@gmail.com" class="btn btn-email">
+                        <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M2 6a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6Zm2 0 8 6 8-6"/></svg>
+                        Email
+                    </a>
+                </div>
+            </div>
+        </article>
+
+    </div>
+
+    <section class="help-section">
+        <div class="eyebrow">Need More?</div>
+        <h2 class="help-title">Connect With Our Official Pages</h2>
+        <div class="help-grid">
+            <a href="https://www.facebook.com/profile.php?id=61567513587222" target="_blank" rel="noopener" class="help-card">
+                <div class="help-media">
+                    <img src="https://scontent.fzyl2-2.fna.fbcdn.net/v/t39.30808-6/471944062_122125516346583786_3792314587918019802_n.jpg?stp=dst-jpg_tt6&cstp=mx638x642&ctp=s638x642&_nc_cat=109&_nc_map=urlgen_bucketless&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=v5LhytIjEhcQ7kNvwGQRi9o&_nc_oc=AdpfgmqZl1pardq8mTea9WOaDODk-pBQjWdxg2pYn1aNCrjfz3EL60Qgx1u_NtVDIhE&_nc_zt=23&_nc_ht=scontent.fzyl2-2.fna&_nc_gid=8KM-iUMa5Xn45STIa67X8g&_nc_ss=7b2a8&oh=00_AQD1iUEfV9HiGhekwoap4n2lhvxh0gQEIgY_pPyd_T25pA&oe=6A5BBBDA" alt="Department of BECM, RUET" class="help-pic" loading="lazy">
+                </div>
+                <h3 class="help-name">Department of BECM, RUET</h3>
+                <span class="help-sub">Official Department Page</span>
+            </a>
+            <a href="https://www.facebook.com/profile.php?id=61579983149325" target="_blank" rel="noopener" class="help-card">
+                <div class="help-media">
+                    <img src="https://scontent.fzyl2-2.fna.fbcdn.net/v/t39.30808-6/539464833_122096762834999438_1365968793126636361_n.jpg?stp=dst-jpg_tt6&cstp=mx2048x2048&ctp=s2048x2048&_nc_cat=105&_nc_map=urlgen_bucketless&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=NF66v4fadm4Q7kNvwEK3XnF&_nc_oc=AdpKWzc9dyWqkluPgmvvAVM3mq575YGOAxCVqOCHAVQE2IZk4HNUQvQ3jNpxASnQms0&_nc_zt=23&_nc_ht=scontent.fzyl2-2.fna&_nc_gid=6jXn5sXsjvRQiFawx4VQyQ&_nc_ss=7b2a8&oh=00_AQDm4k4GSP4I3Ne2jsOFJBU63ZO5HQJbF9uNHJ-_dxQM2Q&oe=6A5BB49D" alt="BECM' 24 RUET" class="help-pic" loading="lazy">
+                </div>
+                <h3 class="help-name">BECM' 24 RUET</h3>
+                <span class="help-sub">Authorized Platform of BECM '24</span>
+            </a>
+        </div>
+    </section>
+
+    <footer>BECM-24 &middot; Rajshahi University of Engineering &amp; Technology</footer>
+</body>
+</html>
