@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BECM-24 Student Directory</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #F4F6F8;
+            --card: #FFFFFF;
+            --ink: #1B2733;
+            --ink-soft: #5B6B7A;
+            --steel: #2E5F76;
+            --steel-deep: #1F4358;
+            --line: #E1E6EB;
+            --grid: rgba(46, 95, 118, 0.05);
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            color: var(--ink);
+            background-color: var(--bg);
+            background-image:
+                linear-gradient(var(--grid) 1px, transparent 1px),
+                linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        header {
+            padding: 64px 24px 40px;
+            text-align: center;
+            border-bottom: 1px solid var(--line);
+            background: linear-gradient(180deg, rgba(255,255,255,0.6), rgba(255,255,255,0));
+        }
+
+        .eyebrow {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.75em;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--steel);
+            margin-bottom: 14px;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.75em;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--steel-deep);
+            background: rgba(46, 95, 118, 0.1);
+            padding: 9px 18px;
+            border-radius: 999px;
+            margin-bottom: 18px;
+        }
+
+        .badge .icon { width: 18px; height: 18px; }
+
+        h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 2.6em;
+            letter-spacing: -0.01em;
+            margin: 0 0 10px;
+            color: var(--ink);
+        }
+
+        .subtitle {
+            color: var(--ink-soft);
+            font-size: 1.1em;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 22px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 48px 24px 80px;
+        }
+
+        .card {
+            background: var(--card);
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 28px 20px 22px;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px -8px rgba(31, 67, 88, 0.18);
+            border-color: var(--steel);
+        }
+
+        .card-media {
+            width: 128px;
+            height: 128px;
+            border-radius: 50%;
+            overflow: hidden;
+            background: #EDF1F4;
+            border: 3px solid var(--steel);
+            box-shadow: 0 4px 10px -2px rgba(31, 67, 88, 0.25);
+            flex-shrink: 0;
+        }
+
+        .profile-pic {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .card-body {
+            width: 100%;
+            padding-top: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .roll-tag {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.72em;
+            letter-spacing: 0.04em;
+            color: #fff;
+            background: var(--steel);
+            padding: 3px 10px;
+            border-radius: 20px;
+            margin-bottom: 10px;
+        }
+
+        .name {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.08em;
+            font-weight: 600;
+            margin: 0 0 16px;
+            color: var(--ink);
+            line-height: 1.3;
+        }
+
+        .actions {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none;
+            color: #fff;
+            padding: 9px 16px;
+            border-radius: 6px;
+            font-size: 0.9em;
+            font-weight: 500;
+            transition: background-color 0.2s ease;
+        }
+
+        .btn-fb { background-color: var(--steel-deep); }
+        .btn-fb:hover { background-color: var(--steel); }
+
+        .btn-call { background-color: #fff; color: var(--steel-deep); border: 1.5px solid var(--line); font-family: 'IBM Plex Mono', monospace; font-size: 0.85em; letter-spacing: 0.02em; }
+        .btn-call:hover { border-color: var(--steel); color: var(--steel); background-color: #F4F6F8; }
+
+        .contact-row { display: flex; flex-wrap: wrap; gap: 8px; }
+        .contact-row .btn-call { flex: 1 1 auto; padding: 9px 8px; font-size: 0.8em; white-space: nowrap; }
+        .btn-copy { cursor: pointer; font-family: inherit; flex: 0 0 auto; background-color: #fff; color: var(--steel-deep); border: 1.5px solid var(--line); border-radius: 6px; padding: 9px 11px; display: flex; align-items: center; justify-content: center; transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease; }
+        .btn-copy:hover { border-color: var(--steel); color: var(--steel); background-color: #F4F6F8; }
+        .btn-copy:focus-visible { outline: 2px solid var(--steel); outline-offset: 2px; }
+        .btn-copy.copied { background-color: var(--steel-deep); border-color: var(--steel-deep); color: #fff; }
+
+        .icon { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 1.8; flex-shrink: 0; }
+        .btn-fb .icon { fill: currentColor; stroke: none; }
+
+        footer {
+            text-align: center;
+            padding: 28px 24px 48px;
+            color: var(--ink-soft);
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.75em;
+            letter-spacing: 0.04em;
+        }
+
+        .help-section {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 8px 24px 64px;
+            text-align: center;
+        }
+
+        .help-section .eyebrow {
+            margin-bottom: 12px;
+        }
+
+        .help-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 1.7em;
+            margin: 0 0 32px;
+            color: var(--ink);
+        }
+
+        .help-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 320px));
+            gap: 22px;
+            justify-content: center;
+        }
+
+        .help-card {
+            background: var(--card);
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: 26px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+        }
+
+        .help-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px -8px rgba(31, 67, 88, 0.18);
+            border-color: var(--steel);
+        }
+
+        .help-media {
+            width: 96px;
+            height: 96px;
+            border-radius: 50%;
+            overflow: hidden;
+            background: #EDF1F4;
+            border: 3px solid var(--steel);
+            box-shadow: 0 4px 10px -2px rgba(31, 67, 88, 0.25);
+            flex-shrink: 0;
+        }
+
+        .help-pic {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .help-name {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.08em;
+            font-weight: 600;
+            margin: 16px 0 4px;
+            color: var(--ink);
+        }
+
+        .help-sub {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.72em;
+            letter-spacing: 0.03em;
+            color: var(--ink-soft);
+        }
+
+
+        /* ---- Phone unlock ---- */
+        .unlock-wrap { margin-top: 22px; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+        .btn-unlock { cursor: pointer; display: inline-flex; align-items: center; gap: 8px; font-family: 'IBM Plex Mono', monospace; font-size: 0.8em; letter-spacing: 0.08em; text-transform: uppercase; color: #fff; background: var(--steel-deep); border: none; border-radius: 999px; padding: 10px 20px; transition: background-color 0.2s ease; }
+        .btn-unlock:hover { background: var(--steel); }
+        .btn-unlock:focus-visible { outline: 2px solid var(--steel); outline-offset: 2px; }
+        .btn-unlock:disabled { opacity: .7; cursor: default; }
+        .unlock-form { display: none; gap: 8px; align-items: center; flex-wrap: wrap; justify-content: center; }
+        .unlock-form.open { display: flex; }
+        .unlock-input { font-family: 'IBM Plex Mono', monospace; font-size: 0.9em; letter-spacing: 0.1em; padding: 10px 14px; border: 1.5px solid var(--line); border-radius: 6px; background: #fff; color: var(--ink); width: 200px; text-align: center; }
+        .unlock-input:focus { outline: none; border-color: var(--steel); }
+        .unlock-input.error { border-color: #C0392B; animation: shake 0.3s; }
+        .unlock-msg { font-family: 'IBM Plex Mono', monospace; font-size: 0.75em; min-height: 1.2em; color: var(--ink-soft); }
+        .unlock-msg.err { color: #C0392B; }
+        .unlock-msg.ok { color: #2E7D4F; }
+        .btn-call.masked { cursor: default; pointer-events: none; letter-spacing: 0.1em; }
+        body.locked .btn-copy { display: none; }
+        @keyframes shake { 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }
+
+        @media (max-width: 480px) {
+            h1 { font-size: 2em; }
+            header { padding: 48px 20px 32px; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="badge">
+            <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M22 9 12 4 2 9l10 5 10-5Z"/><path d="M6 11.5V16c0 1.4 2.7 3 6 3s6-1.6 6-3v-4.5"/><path d="M22 9v6"/></svg>
+            Department of BECM, RUET
+        </div>
+        <h1>BECM-24 Student Directory</h1>
+        <p class="subtitle">Rajshahi University of Engineering &amp; Technology<br>Department of Building Engineering and Construction Management</p>
+        <div class="unlock-wrap">
+            <button type="button" class="btn-unlock" id="unlockToggle">
+                <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
+                <span id="unlockLabel">Unlock phone numbers</span>
+            </button>
+            <form class="unlock-form" id="unlockForm" autocomplete="off">
+                <input type="text" class="unlock-input" id="unlockCode" placeholder="Enter code" aria-label="Enter access code" maxlength="64">
+                <button type="submit" class="btn-unlock" id="unlockSubmit">Unlock</button>
+            </form>
+            <div class="unlock-msg" id="unlockMsg" role="status"></div>
+        </div>
+    </header>
+
+    <div class="container">
+
+        <article class="card">
+            <div class="card-media">
+                <img src="./2412001.jpg" alt="Mst.Jannatun Ferdus Jui's Picture" class="profile-pic" loading="lazy">
+            </div>
+            <div class="card-body">
+                <span class="roll-tag">2412001</span>
+                <h2 class="name">Mst.Jannatun Ferdus Jui</h2>
+                <div class="actions">
+                    <a href="https://www.facebook.com/share/1BNYMXkv3Q/" target="_blank" rel="noopener" class="btn btn-fb">
+                        <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M22 12.06C22 6.51 17.52 2 12 2S2 6.51 2 12.06c0 5.02 3.66 9.18 8.44 9.94v-7.03H7.9v-2.91h2.54V9.85c0-2.51 1.49-3.9 3.77-3.9 1.09 0 2.23.2 2.23.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.87h2.78l-.44 2.91h-2.34V22c4.78-.76 8.44-4.92 8.44-9.94Z"/></svg>
+                        Profile
+                    </a>
+                    <div class="contact-row">
+                    <a class="btn btn-call masked" data-enc="g7tMuNMaLJXAUg7H8bq7vUFjgbHhX9k+DRp4GywdacibkAhPJNGm"><svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z"/></svg> <span class="num">••• ••••••••</span></a>
+                    <button type="button" class="btn-copy" aria-label="Copy phone number" title="Copy phone number"><svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg></button>
+                </div>
+                </div>
+            </div>
+        </article>
+
+        <article class="card">
+            <div class="card-media">
+                <img src="./2412003.jpg" alt="Student Picture" class="profile-pic" loading="lazy">
+            </div>
+            <div class="card-body">
+                <span class="roll-tag">2412003</span>
+                <h2 class="name">Irfan Hossain Alvi</h2>
+                <div class="actions">
+                    <a href="https://www.facebook.com/share/1CfiY9QBKp/?mibextid=wwXIfr" target="_blank" rel="noopener" class="btn btn-fb">
+                        <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M22 12.06C22 6.51 17.52 2 12 2S2 6.51 2 12.06c0 5.02 3.66 9.18 8.44 9.94v-7.03H7.9v-2.91h2.54V9.85c0-2.51 1.49-3.9 3.77-3.9 1.09 0 2.23.2 2.23.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.87h2.78l-.44 2.91h-2.34V22c4.78-.76 8.44-4.92 8.44-9.94Z"/></svg>
+                        Profile
+                    </a>
+                    <div class="contact-row">
+                    <a class="btn btn-call masked" data-enc="F0uz5B2bs70uxGfhtbY4UsY/qGCyogZvelfz92NzIxaGyxMMC4zn"><svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z"/></svg> <span class="num">••• ••••••••</span></a>
+                    <button type="button" class="btn-copy" aria-label="Copy phone number" title="Copy phone number"><svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg></button>
+                </div>
+                </div>
+            </div>
+        </article>
+
+        <article class="card">
+            <div class="card-media">
+                <img src="./2412005.jpg" alt="Student Picture" class="profile-pic" loading="lazy">
+            </div>
+            <div class="card-body">
+                <span class="roll-tag">2412005</span>
+                <h2 class="name">Md. Mahbubur Rahman</h2>
+                <div class="actions">
+                    <a href="https://www.facebook.com/mahbuburrahman.64" target="_blank" rel="noopener" class="btn btn-fb">
+                        <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M22 12.06C22 6.51 17.52 2 12 2S2 6.51 2 12.06c0 5.02 3.66 9.18 8.44 9.94v-7.03H7.9v-2.91h2.54V9.85c0-2.51 1.49-3.9 3.77-3.9 1.09 0 2.23.2 2.23.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.87h2.78l-.44 2.91h-2.34V22c4.78-.76 8.44-4.92 8.44-9.94Z"/></svg>
+                        Profile
+                    </a>
+                    <div class="contact-row">
+                    <a class="btn btn-call masked" data-enc="bHz5HvlkxA3WH2UjK2DkZiQs8u5F+20texydvdTy0zlSGR8z9jf1"><svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z"/></svg> <span class="num">••• ••••••••</span></a>
+                    <button type="button" class="btn-copy" aria-label="Copy phone number" title="Copy phone number"><svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg></button>
+                </div>
+                </div>
+            </div>
+        </article>
+
+        <article class="card">
+            <div class="card-media">
+                <img src="./2412006.jpg" alt="Student Picture" class="profile-pic" loading="lazy">
+            </div>
+            <div class="card-body">
+                <span class="roll-tag">2412006</span>
+                <h2 class="name">Nazmul Haque</h2>
+                <div class="actions">
+                    <a href="https://www.facebook.com/share/1HhXPhYUPX/" target="_blank" rel="noopener" class="btn btn-fb">
+                        <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M22 12.06C22 6.51 17.52 2 12 2S2 6.51 2 12.06c0 5.02 3.66 9.18 8.44 9.94v-7.03H7.9v-2.91h2.54V9.85c0-2.51 1.49-3.9 3.77-3.9 1.09 0 2.23.2 2.23.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.87h2.78l-.44 2.91h-2.34V22c4.78-.76 8.44-4.92 8.44-9.94Z"/></svg>
+                        Profile
+                    </a>
+                </div>
+            </div>
+        </article>
+
+        <article class="card">
+            <div class="card-media">
+                <img src="./2412007.jpg" alt="Student Picture" class="profile-pic" loading="lazy">
+            </div>
+            <div class="card-body">
+                <span class="roll-tag">2412007</span>
+                <h2 class="name">A. K. M. Arfan Ashfia</h2>
+                <div class="actions">
+                    <a href="https://www.facebook.com/share/17VKWZYcV5/" target="_blank" rel="noopener" class="btn btn-fb">
+                        <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M22 12.06C22 6.51 17.52 2 12 2S2 6.51 2 12.06c0 5.02 3.66 9.18 8.44 9.94v-7.03H7.9v-2.91h2.54V9.85c0-2.51 1.49-3.9 3.77-3.9 1.09 0 2.23.2 2.23.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.87h2.78l-.44 2.91h-2.34V22c4.78-.76 8.44-4.92 8.44-9.94Z"/></svg>
+                        Profile
+                    </a>
+                    <div class="contact-row">
+                    <a class="btn btn-call masked" data-enc="pFlqneWLN8PfXDZkITBSsLuAfKacPu1QZafAfxY5rlk1r93NL1IM"><svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z"/></svg> <span class="num">••• ••••••••</span></a>
+                    <button type="button" class="btn-copy" aria-label="Copy phone number" title="Copy phone number"><svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg></button>
+                </div>
+                </div>
+            </div>
+        </article>
+
+        <article class="card">
+            <div class="card-media">
+                <img src="./2412008.jpg" alt="Student Picture" class="profile-pic" loading="lazy">
+            </div>
+            <div class="card-body">
+                <span class="roll-tag">2412008</span>
+                <h2 class="name">Asma Azom Nisat</h2>
+                <div class="actions">
+                    <a href="https://www.facebook.com/nis.ha.779160" target="_blank" rel="noopener" class="btn btn-fb">
+                        <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M22 12.06C22 6.51 17.52 2 12 2S2 6.51 2 12.06c0 5.02 3.66 9.18 8.44 9.94v-7.03H7.9v-2.91h2.54V9.85c0-2.51 1.49-3.9 3.77-3.9 1.09 0 2.23.2 2.23.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.87h2.78l-.44 2.91h-2.34V22c4.78-.76 8.44-4.92 8.44-9.94Z"/></svg>
+                        Profile
+                    </a>
+                    <div class="contact-row">
+                    <a class="btn btn-call masked" data-enc="SarM1728vITtJOMa+X4Fjode3anWBd/N4NfqSioGRlz2zr7tW61p"><svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z"/></svg> <span class="num">••• ••••••••</span></a>
+                    <button type="button" class="btn-copy" aria-label="Copy phone number" title="Copy phone number"><svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg></button>
+                </div>
+                </div>
+            </div>
+        </article>
+
+        <article class="card">
+            <div class="card-media">
+                <img src="./2412009.jpg" alt="Student Picture" class="profile-pic" loading="lazy">
+            </div>
+            <div class="card-body">
+                <span class="roll-tag">2412009</span>
+                <h2 class="name">Md Milon Mia</h2>
+                <div class="actions">
+                    <a href="https://www.facebook.com/share/1HnNm5GpAd/" target="_blank" rel="noopener" class="btn btn-fb">
+                        <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M22 12.06C22 6.51 17.52 2 12 2S2 6.51 2 12.06c0 5.02 3.66 9.18 8.44 9.94v-7.03H7.9v-2.91h2.54V9.85c0-2.51 1.49-3.9 3.77-3.9 1.09 0 2.23.2 2.23.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.87h2.78l-.44 2.91h-2.34V22c4.78-.76 8.44-4.92 8.44-9.94Z"/></svg>
+                        Profile
+                    </a>
+                    <div class="contact-row">
+                    <a class="btn btn-call masked" data-enc="comX0RqjhaG4jDAxmHi+fNNQqcKlEdlRrxLGwggx/9v2mZs++XMU"><svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z"/></svg> <span class="num">••• ••••••••</span></a>
+                    <button type="button" class="btn-copy" aria-label="Copy phone number" title="Copy phone number"><svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg></button>
+                </div>
+                </div>
+            </div>
+        </article>
+
+        <article class="card">
+            <div class="card-media">
+                <img src="./2412010.jpg" alt="Student Picture" class="profile-pic" loading="lazy">
+            </div>
+            <div class="card-body">
+                <span class="roll-tag">2412010</span>
+                <h2 class="name">Md.Imteyaz Sheikh</h2>
+                <div class="actions">
+                    <a href="https://www.facebook.com/share/18ZgeAf9yT/" target="_blank" rel="noopener" class="btn btn-fb">
+                        <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M22 12.06C22 6.51 17.52 2 12 2S2 6.51 2 12.06c0 5.02 3.66 9.18 8.44 9.94v-7.03H7.9v-2.91h2.54V9.85c0-2.51 1.49-3.9 3.77-3.9 1.09 0 2.23.2 2.23.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.87h2.78l-.44 2.91h-2.34V22c4.78-.76 8.44-4.92 8.44-9.94Z"/></svg>
+                        Profile
+                    </a>
+                    <div class="contact-row">
+                    <a class="btn btn-call masked" data-enc="wyU7A+79yaZQ2i9JxJiuyIJiKCvBOZ+xA5aNN0rAXIzeo3Hfz0gD"><svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z"/></svg> <span class="num">••• ••••••••</span></a>
+                    <button type="button" class="btn-copy" aria-label="Copy phone number" title="Copy phone number"><svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg></button>
+                </div>
+                </div>
+            </div>
+        </article>
+
+        <article class="card">
+            <div class="card-media">
+                <img src="./2412011.jpg" alt="Student Picture" class="profile-pic" loading="lazy">
+            </div>
+            <div class="card-body">
+                <span class="roll-tag">2412011</span>
+                <h2 class="name">Md. Safiul Islam</h2>
+                <div class="actions">
+                    <a href="https://www.facebook.com/share/17bnfXPRxh/" target="_blank" rel="noopener" class="btn btn-fb">
+                        <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M22 12.06C22 6.51 17.52 2 12 2S2 6.51 2 12.06c0 5.02 3.66 9.18 8.44 9.94v-7.03H7.9v-2.91h2.54V9.85c0-2.51 1.49-3.9 3.77-3.9 1.09 0 2.23.2 2.23.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.87h2.78l-.44 2.91h-2.34V22c4.78-.76 8.44-4.92 8.44-9.94Z"/></svg>
+                        Profile
+                    </a>
+                    <div class="contact-row">
+                    <a class="btn btn-call masked" data-enc="npNzAhb+xCja/BHLkJMiEth8NEGKni/RY1YAhOfiVog8AJgdSGnk"><svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z"/></svg> <span class="num">••• ••••••••</span></a>
+                    <button type="button" class="btn-copy" aria-label="Copy phone number" title="Copy phone number"><svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg></button>
+                </div>
+                </div>
+            </div>
+        </article>
+
+        <article class="card">
+            <div class="card-media">
+                <img src="./2412012.jpg" alt="Student Picture" class="profile-pic" loading="lazy">
+            </div>
+            <div class="card-body">
+                <span class="roll-tag">2412012</span>
+                <h2 class="name">Tanzim Hasan Tonoy</h2>
+                <div class="actions">
+                    <a href="https://www.facebook.com/share/1ZuEKMtyWL/" target="_blank" rel="noopener" class="btn btn-fb">
+                        <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M22 12.06C22 6.51 17.52 2 12 2S2 6.51 2 12.06c0 5.02 3.66 9.18 8.44 9.94v-7.03H7.9v-2.91h2.54V9.85c0-2.51 1.49-3.9 3.77-3.9 1.09 0 2.23.2 2.23.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.87h2.78l-.44 2.91h-2.34V22c4.78-.76 8.44-4.92 8.44-9.94Z"/></svg>
+                        Profile
+                    </a>
+                    <div class="contact-row">
+                    <a class="btn btn-call masked" data-enc="S/NFCObbcgYiNwZXE5On+FWe5xEh5UmgY2jGPwe0u11zRV1wV83l"><svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z"/></svg> <span class="num">••• ••••••••</span></a>
+                    <button type="button" class="btn-copy" aria-label="Copy phone number" title="Copy phone number"><svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg></button>
+                </div>
+                </div>
+            </div>
+        </article>
+
+        <article class="card">
+            <div class="card-media">
+                <img src="./2412013.jpg" alt="Esraf Anjir's Picture" class="profile-pic" loading="lazy">
+            </div>
+            <div class="card-body">
+                <span class="roll-tag">2412013</span>
+                <h2 class="name">Esraf Anjir</h2>
+                <div class="actions">
+                    <a href="https://www.facebook.com/esraf.anjir.nahid.2025" target="_blank" rel="noopener" class="btn btn-fb">
+                        <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M22 12.06C22 6.51 17.52 2 12 2S2 6.51 2 12.06c0 5.02 3.66 9.18 8.44 9.94v-7.03H7.9v-2.91h2.54V9.85c0-2.51 1.49-3.9 3.77-3.9 1.09 0 2.23.2 2.23.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.87h2.78l-.44 2.91h-2.34V22c4.78-.76 8.44-4.92 8.44-9.94Z"/></svg>
+                        Profile
+                    </a>
+                    <div class="contact-row">
+                    <a class="btn btn-call masked" data-enc="8qNuRsuV2F/9WAjLJAGkcOdqggHxNPwfwhNcp4mQlEvbarewvcpL"><svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z"/></svg> <span class="num">••• ••••••••</span></a>
+                    <button type="button" class="btn-copy" aria-label="Copy phone number" title="Copy phone number"><svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg></button>
+                </div>
+                </div>
+            </div>
+        </article>
+
+        <article class="card">
+            <div class="card-media">
+                <img src="./2412014.jpg" alt="Md.Rafiqul Hoque's Picture" class="profile-pic" loading="lazy">
+            </div>
+            <div class="card-body">
+                <span class="roll-tag">2412014</span>
+                <h2 class="name">Md.Rafiqul Hoque</h2>
+                <div class="actions">
+                    <a href="https://www.facebook.com/mdrafiqul.hoque.963" target="_blank" rel="noopener" class="btn btn-fb">
+                        <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M22 12.06C22 6.51 17.52 2 12 2S2 6.51 2 12.06c0 5.02 3.66 9.18 8.44 9.94v-7.03H7.9v-2.91h2.54V9.85c0-2.51 1.49-3.9 3.77-3.9 1.09 0 2.23.2 2.23.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.87h2.78l-.44 2.91h-2.34V22c4.78-.76 8.44-4.92 8.44-9.94Z"/></svg>
+                        Profile
+                    </a>
+                    <div class="contact-row">
+                    <a class="btn btn-call masked" data-enc="Knv+NTgueTQvKCmpXAvwA6ocdJi5Vc0X4a8jD42cyyGQmHt/xxWJ"><svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z"/></svg> <span class="num">••• ••••••••</span></a>
+                    <button type="button" class="btn-copy" aria-label="Copy phone number" title="Copy phone number"><svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg></button>
+                </div>
+                </div>
+            </div>
+        </article>
+
+        <article class="card">
+            <div class="card-media">
+                <img src="./2412015.jpg" alt="Md. Sajeeb Hosen's Picture" class="profile-pic" loading="lazy">
+            </div>
+            <div class="card-body">
+                <span class="roll-tag">2412015</span>
+                <h2 class="name">Md. Sajeeb Hosen</h2>
+                <div class="actions">
+                    <a href="https://www.facebook.com/md.sajeeb.hosen.449457" target="_blank" rel="noopener" class="btn btn-fb">
+                        <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M22 12.06C22 6.51 17.52 2 12 2S2 6.51 2 12.06c0 5.02 3.66 9.18 8.44 9.94v-7.03H7.9v-2.91h2.54V9.85c0-2.51 1.49-3.9 3.77-3.9 1.09 0 2.23.2 2.23.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.87h2.78l-.44 2.91h-2.34V22c4.78-.76 8.44-4.92 8.44-9.94Z"/></svg>
+                        Profile
+                    </a>
+                    <div class="contact-row">
+                    <a class="btn btn-call masked" data-enc="QF1PydbmLLk9ew6o3VbIkhrZXlmHYmeg1DdcNcT8Xmh8lJHg0CM7"><svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z"/></svg> <span class="num">••• ••••••••</span></a>
+                    <button type="button" class="btn-copy" aria-label="Copy phone number" title="Copy phone number"><svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg></button>
+                </div>
+                </div>
+            </div>
+        </article>
+
+        <article class="card">
+            <div class="card-media">
+                <img src="./2412016.jpg" alt="MD. Imran hasan's Picture" class="profile-pic" loading="lazy">
+            </div>
+            <div class="card-body">
+                <span class="roll-tag">2412016</span>
+                <h2 class="name">MD. Imran hasan</h2>
+                <div class="actions">
+                    <a href="https://www.facebook.com/profile.php?fb_profile_edit_entry_point=%7B%22click_point%22%3A%22edit_profile_button%22%2C%22feature%22%3A%22profile_header%22%7D&id=100035339981958&sk=about" target="_blank" rel="noopener" class="btn btn-fb">
+                        <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M22 12.06C22 6.51 17.52 2 12 2S2 6.51 2 12.06c0 5.02 3.66 9.18 8.44 9.94v-7.03H7.9v-2.91h2.54V9.85c0-2.51 1.49-3.9 3.77-3.9 1.09 0 2.23.2 2.23.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.87h2.78l-.44 2.91h-2.34V22c4.78-.76 8.44-4.92 8.44-9.94Z"/></svg>
+                        Profile
+                    </a>
+                    <div class="contact-row">
+                    <a class="btn btn-call masked" data-enc="BHyvPLchpMqfzvmA0LVwt7O0wmsVT06QDvrGm5ljKj/IDC8oG+MA"><svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z"/></svg> <span class="num">••• ••••••••</span></a>
+                    <button type="button" class="btn-copy" aria-label="Copy phone number" title="Copy phone number"><svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg></button>
+                </div>
+                </div>
+            </div>
+        </article>
+
+        <article class="card">
+            <div class="card-media">
+                <img src="./2412017.jpg" alt="Tribani Paul Roshmi's Picture" class="profile-pic" loading="lazy">
+            </div>
+            <div class="card-body">
+                <span class="roll-tag">2412017</span>
+                <h2 class="name">Tribani Paul Roshmi</h2>
+                <div class="actions">
+                    <a href="https://www.facebook.com/share/1ArAye1Nqa/" target="_blank" rel="noopener" class="btn btn-fb">
+                        <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M22 12.06C22 6.51 17.52 2 12 2S2 6.51 2 12.06c0 5.02 3.66 9.18 8.44 9.94v-7.03H7.9v-2.91h2.54V9.85c0-2.51 1.49-3.9 3.77-3.9 1.09 0 2.23.2 2.23.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.87h2.78l-.44 2.91h-2.34V22c4.78-.76 8.44-4.92 8.44-9.94Z"/></svg>
+                        Profile
+                    </a>
+                    <div class="contact-row">
+                    <a class="btn btn-call masked" data-enc="Fd0NWkIWB7h8QU2V1dBP6KR9kkuv4yGYurXQnAo9cufpAjt2sG6Q"><svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z"/></svg> <span class="num">••• ••••••••</span></a>
+                    <button type="button" class="btn-copy" aria-label="Copy phone number" title="Copy phone number"><svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg></button>
+                </div>
+                </div>
+            </div>
+        </article>
+
+        <article class="card">
+            <div class="card-media">
+                <img src="./2412019.jpg" alt="Student Picture" class="profile-pic" loading="lazy">
+            </div>
+            <div class="card-body">
+                <span class="roll-tag">2412019</span>
+                <h2 class="name">MD. Riyad Sarkar</h2>
+                <div class="actions">
+                    <a href="https://www.facebook.com/share/1JY4vnVS7y/" target="_blank" rel="noopener" class="btn btn-fb">
+                        <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M22 12.06C22 6.51 17.52 2 12 2S2 6.51 2 12.06c0 5.02 3.66 9.18 8.44 9.94v-7.03H7.9v-2.91h2.54V9.85c0-2.51 1.49-3.9 3.77-3.9 1.09 0 2.23.2 2.23.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.87h2.78l-.44 2.91h-2.34V22c4.78-.76 8.44-4.92 8.44-9.94Z"/></svg>
+                        Profile
+                    </a>
+                    <div class="contact-row">
+                    <a class="btn btn-call masked" data-enc="KPD9bK+UDJuGLZTlG5igv47OILN2rCzhhtMGny8HXjV6LW0q9PBH"><svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z"/></svg> <span class="num">••• ••••••••</span></a>
+                    <button type="button" class="btn-copy" aria-label="Copy phone number" title="Copy phone number"><svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg></button>
+                </div>
+                </div>
+            </div>
+        </article>
+
+        <article class="card">
+            <div class="card-media">
+                <img src="./2412020.jpg" alt="Student Picture" class="profile-pic" loading="lazy">
+            </div>
+            <div class="card-body">
+                <span class="roll-tag">2412020</span>
+                <h2 class="name">Md. Tanzid Alam</h2>
+                <div class="actions">
+                    <a href="https://www.facebook.com/share/17ZVjvQZpp/" target="_blank" rel="noopener" class="btn btn-fb">
+                        <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M22 12.06C22 6.51 17.52 2 12 2S2 6.51 2 12.06c0 5.02 3.66 9.18 8.44 9.94v-7.03H7.9v-2.91h2.54V9.85c0-2.51 1.49-3.9 3.77-3.9 1.09 0 2.23.2 2.23.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.87h2.78l-.44 2.91h-2.34V22c4.78-.76 8.44-4.92 8.44-9.94Z"/></svg>
+                        Profile
+                    </a>
+                    <div class="contact-row">
+                    <a class="btn btn-call masked" data-enc="oY2nKyUztcX62qJeAVe7aRYB8dYJ5Tk+Pj4D8DjU5aqETDSH7S2t"><svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z"/></svg> <span class="num">••• ••••••••</span></a>
+                    <button type="button" class="btn-copy" aria-label="Copy phone number" title="Copy phone number"><svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg></button>
+                </div>
+                </div>
+            </div>
+        </article>
+
+        <article class="card">
+            <div class="card-media">
+                <img src="./2412021.jpg" alt="Student Picture" class="profile-pic" loading="lazy">
+            </div>
+            <div class="card-body">
+                <span class="roll-tag">2412021</span>
+                <h2 class="name">Mahmudur Rahman Ador</h2>
+                <div class="actions">
+                    <a href="https://www.facebook.com/share/18MVX27gSU/?mibextid=wwXIfr" target="_blank" rel="noopener" class="btn btn-fb">
+                        <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M22 12.06C22 6.51 17.52 2 12 2S2 6.51 2 12.06c0 5.02 3.66 9.18 8.44 9.94v-7.03H7.9v-2.91h2.54V9.85c0-2.51 1.49-3.9 3.77-3.9 1.09 0 2.23.2 2.23.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.87h2.78l-.44 2.91h-2.34V22c4.78-.76 8.44-4.92 8.44-9.94Z"/></svg>
+                        Profile
+                    </a>
+                    <div class="contact-row">
+                    <a class="btn btn-call masked" data-enc="Oqd5vzfKxOwleBJIW4kpCtxP9GFpdV06y1Br8gyMgLeGVt7PKjfk"><svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z"/></svg> <span class="num">••• ••••••••</span></a>
+                    <button type="button" class="btn-copy" aria-label="Copy phone number" title="Copy phone number"><svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg></button>
+                </div>
+                </div>
+            </div>
+        </article>
+
+        <article class="card">
+            <div class="card-media">
+                <img src="./2412022.jpg" alt="Student Picture" class="profile-pic" loading="lazy">
+            </div>
+            <div class="card-body">
+                <span class="roll-tag">2412022</span>
+                <h2 class="name">UMMY AKIBA BARNO</h2>
+                <div class="actions">
+                    <a href="https://www.facebook.com/share/1HbuZFTMTB/" target="_blank" rel="noopener" class="btn btn-fb">
+                        <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M22 12.06C22 6.51 17.52 2 12 2S2 6.51 2 12.06c0 5.02 3.66 9.18 8.44 9.94v-7.03H7.9v-2.91h2.54V9.85c0-2.51 1.49-3.9 3.77-3.9 1.09 0 2.23.2 2.23.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.87h2.78l-.44 2.91h-2.34V22c4.78-.76 8.44-4.92 8.44-9.94Z"/></svg>
+                        Profile
+                    </a>
+                    <div class="contact-row">
+                    <a class="btn btn-call masked" data-enc="JAVy7+kMiO0hwe0485Epxn2O/hftvjKAJrCypxF+GQQtesGMIt6f"><svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z"/></svg> <span class="num">••• ••••••••</span></a>
+                    <button type="button" class="btn-copy" aria-label="Copy phone number" title="Copy phone number"><svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg></button>
+                </div>
+                </div>
+            </div>
+        </article>
+
+        <article class="card">
+            <div class="card-media">
+                <img src="./2412023.jpg" alt="Student Picture" class="profile-pic" loading="lazy">
+            </div>
+            <div class="card-body">
+                <span class="roll-tag">2412023</span>
+                <h2 class="name">Ashikur Rahman</h2>
+                <div class="actions">
+                    <a href="https://www.facebook.com/share/1AycuSMTCQ/" target="_blank" rel="noopener" class="btn btn-fb">
+                        <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M22 12.06C22 6.51 17.52 2 12 2S2 6.51 2 12.06c0 5.02 3.66 9.18 8.44 9.94v-7.03H7.9v-2.91h2.54V9.85c0-2.51 1.49-3.9 3.77-3.9 1.09 0 2.23.2 2.23.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.87h2.78l-.44 2.91h-2.34V22c4.78-.76 8.44-4.92 8.44-9.94Z"/></svg>
+                        Profile
+                    </a>
+                    <div class="contact-row">
+                    <a class="btn btn-call masked" data-enc="nsLN5Tm9q3erP/pB6aAqbNmvRPX7EncKJtKEjF36L+ArUSXY/Ovy"><svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z"/></svg> <span class="num">••• ••••••••</span></a>
+                    <button type="button" class="btn-copy" aria-label="Copy phone number" title="Copy phone number"><svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg></button>
+                </div>
+                </div>
+            </div>
+        </article>
+
+        <article class="card">
+            <div class="card-media">
+                <img src="./2412024.jpg" alt="Student Picture" class="profile-pic" loading="lazy">
+            </div>
+            <div class="card-body">
+                <span class="roll-tag">2412024</span>
+                <h2 class="name">Parthiv Paul Apurba</h2>
+                <div class="actions">
+                    <a href="https://www.facebook.com/share/18CmvxgxSj/" target="_blank" rel="noopener" class="btn btn-fb">
+                        <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M22 12.06C22 6.51 17.52 2 12 2S2 6.51 2 12.06c0 5.02 3.66 9.18 8.44 9.94v-7.03H7.9v-2.91h2.54V9.85c0-2.51 1.49-3.9 3.77-3.9 1.09 0 2.23.2 2.23.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.87h2.78l-.44 2.91h-2.34V22c4.78-.76 8.44-4.92 8.44-9.94Z"/></svg>
+                        Profile
+                    </a>
+                    <div class="contact-row">
+                    <a class="btn btn-call masked" data-enc="SQfRJf4nVYJaUkE7zO8y95rQ6B3i83bOKPevUpxqhptuG8Ry2Xg7"><svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z"/></svg> <span class="num">••• ••••••••</span></a>
+                    <button type="button" class="btn-copy" aria-label="Copy phone number" title="Copy phone number"><svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg></button>
+                </div>
+                </div>
+            </div>
+        </article>
+
+        <article class="card">
+            <div class="card-media">
+                <img src="./2412025.jpg" alt="Student Picture" class="profile-pic" loading="lazy">
+            </div>
+            <div class="card-body">
+                <span class="roll-tag">2412025</span>
+                <h2 class="name">Imran Rasel</h2>
+                <div class="actions">
+                    <a href="https://www.facebook.com/share/1EDGp5TjEz/" target="_blank" rel="noopener" class="btn btn-fb">
+                        <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M22 12.06C22 6.51 17.52 2 12 2S2 6.51 2 12.06c0 5.02 3.66 9.18 8.44 9.94v-7.03H7.9v-2.91h2.54V9.85c0-2.51 1.49-3.9 3.77-3.9 1.09 0 2.23.2 2.23.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.87h2.78l-.44 2.91h-2.34V22c4.78-.76 8.44-4.92 8.44-9.94Z"/></svg>
+                        Profile
+                    </a>
+                    <div class="contact-row">
+                    <a class="btn btn-call masked" data-enc="jE477EcHWL8k9W5tsaig9NaZWvS1GLVVlc1xIcCeXnJt0VcNjtv2"><svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z"/></svg> <span class="num">••• ••••••••</span></a>
+                    <button type="button" class="btn-copy" aria-label="Copy phone number" title="Copy phone number"><svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg></button>
+                </div>
+                </div>
+            </div>
+        </article>
+
+        <article class="card">
+            <div class="card-media">
+                <img src="./2412026.jpg" alt="Student Picture" class="profile-pic" loading="lazy">
+            </div>
+            <div class="card-body">
+                <span class="roll-tag">2412026</span>
+                <h2 class="name">Toufikur Rahman Efaz</h2>
+                <div class="actions">
+                    <a href="https://www.facebook.com/share/1PKsyGzp1w/" target="_blank" rel="noopener" class="btn btn-fb">
+                        <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M22 12.06C22 6.51 17.52 2 12 2S2 6.51 2 12.06c0 5.02 3.66 9.18 8.44 9.94v-7.03H7.9v-2.91h2.54V9.85c0-2.51 1.49-3.9 3.77-3.9 1.09 0 2.23.2 2.23.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.87h2.78l-.44 2.91h-2.34V22c4.78-.76 8.44-4.92 8.44-9.94Z"/></svg>
+                        Profile
+                    </a>
+                    <div class="contact-row">
+                    <a class="btn btn-call masked" data-enc="ktV8GJT6L80nINKJmlINMh6fB17igF+QiMNOFZfdLwuN2xC4i5QU"><svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z"/></svg> <span class="num">••• ••••••••</span></a>
+                    <button type="button" class="btn-copy" aria-label="Copy phone number" title="Copy phone number"><svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg></button>
+                </div>
+                </div>
+            </div>
+        </article>
+
+        <article class="card">
+            <div class="card-media">
+                <img src="./2412027.jpg" alt="Student Picture" class="profile-pic" loading="lazy">
+            </div>
+            <div class="card-body">
+                <span class="roll-tag">2412027</span>
+                <h2 class="name">Jobayer Ahmed</h2>
+                <div class="actions">
+                    <a href="https://www.facebook.com/share/1AvaQsbM5a/" target="_blank" rel="noopener" class="btn btn-fb">
+                        <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M22 12.06C22 6.51 17.52 2 12 2S2 6.51 2 12.06c0 5.02 3.66 9.18 8.44 9.94v-7.03H7.9v-2.91h2.54V9.85c0-2.51 1.49-3.9 3.77-3.9 1.09 0 2.23.2 2.23.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.87h2.78l-.44 2.91h-2.34V22c4.78-.76 8.44-4.92 8.44-9.94Z"/></svg>
+                        Profile
+                    </a>
+                    <div class="contact-row">
+                    <a class="btn btn-call masked" data-enc="eOaWQu+HqFZLSTuRaZHrxHA5gu0EhaoKSRYVDZvNgpTjgKAVKLUH"><svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z"/></svg> <span class="num">••• ••••••••</span></a>
+                    <button type="button" class="btn-copy" aria-label="Copy phone number" title="Copy phone number"><svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg></button>
+                </div>
+                </div>
+            </div>
+        </article>
+
+        <article class="card">
+            <div class="card-media">
+                <img src="./2412028.jpg" alt="Student Picture" class="profile-pic" loading="lazy">
+            </div>
+            <div class="card-body">
+                <span class="roll-tag">2412028</span>
+                <h2 class="name">Mazba Ul Haque Madhurjo</h2>
+                <div class="actions">
+                    <a href="https://www.facebook.com/share/1DpvS3jRZr/" target="_blank" rel="noopener" class="btn btn-fb">
+                        <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M22 12.06C22 6.51 17.52 2 12 2S2 6.51 2 12.06c0 5.02 3.66 9.18 8.44 9.94v-7.03H7.9v-2.91h2.54V9.85c0-2.51 1.49-3.9 3.77-3.9 1.09 0 2.23.2 2.23.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.87h2.78l-.44 2.91h-2.34V22c4.78-.76 8.44-4.92 8.44-9.94Z"/></svg>
+                        Profile
+                    </a>
+                    <div class="contact-row">
+                    <a class="btn btn-call masked" data-enc="HbtXp2vJcWRvFQwo0klX8qN9YyMj/OLGnj7PgOBbISc5xEnuZVnn"><svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z"/></svg> <span class="num">••• ••••••••</span></a>
+                    <button type="button" class="btn-copy" aria-label="Copy phone number" title="Copy phone number"><svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg></button>
+                </div>
+                </div>
+            </div>
+        </article>
+
+        <article class="card">
+            <div class="card-media">
+                <img src="./2412029.jpg" alt="Student Picture" class="profile-pic" loading="lazy">
+            </div>
+            <div class="card-body">
+                <span class="roll-tag">2412029</span>
+                <h2 class="name">S. M. Mahi Reza Rishat</h2>
+                <div class="actions">
+                    <a href="https://www.facebook.com/share/1DXZYvcPNJ/" target="_blank" rel="noopener" class="btn btn-fb">
+                        <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M22 12.06C22 6.51 17.52 2 12 2S2 6.51 2 12.06c0 5.02 3.66 9.18 8.44 9.94v-7.03H7.9v-2.91h2.54V9.85c0-2.51 1.49-3.9 3.77-3.9 1.09 0 2.23.2 2.23.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.87h2.78l-.44 2.91h-2.34V22c4.78-.76 8.44-4.92 8.44-9.94Z"/></svg>
+                        Profile
+                    </a>
+                    <div class="contact-row">
+                    <a class="btn btn-call masked" data-enc="/QUNtmLw6fiX8bjxhApM0/B/6qpIHDdLi0tqYj2tC2vxyuALBgoM"><svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z"/></svg> <span class="num">••• ••••••••</span></a>
+                    <button type="button" class="btn-copy" aria-label="Copy phone number" title="Copy phone number"><svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg></button>
+                </div>
+                </div>
+            </div>
+        </article>
+
+        <article class="card">
+            <div class="card-media">
+                <img src="./2412030.jpg" alt="Student Picture" class="profile-pic" loading="lazy">
+            </div>
+            <div class="card-body">
+                <span class="roll-tag">2412030</span>
+                <h2 class="name">Fatima Rahman Sadia</h2>
+                <div class="actions">
+                    <a href="https://www.facebook.com/share/1H6ypZBV3w/" target="_blank" rel="noopener" class="btn btn-fb">
+                        <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M22 12.06C22 6.51 17.52 2 12 2S2 6.51 2 12.06c0 5.02 3.66 9.18 8.44 9.94v-7.03H7.9v-2.91h2.54V9.85c0-2.51 1.49-3.9 3.77-3.9 1.09 0 2.23.2 2.23.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.87h2.78l-.44 2.91h-2.34V22c4.78-.76 8.44-4.92 8.44-9.94Z"/></svg>
+                        Profile
+                    </a>
+                    <div class="contact-row">
+                    <a class="btn btn-call masked" data-enc="mihYRwFx2EZaQ/mnV1XOgkHLqlyMxx8FMX/FkPzcDZ91O86oMkhD"><svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z"/></svg> <span class="num">••• ••••••••</span></a>
+                    <button type="button" class="btn-copy" aria-label="Copy phone number" title="Copy phone number"><svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg></button>
+                </div>
+                </div>
+            </div>
+        </article>
+
+    </div>
+
+    <section class="help-section">
+        <div class="eyebrow">Need More?</div>
+        <h2 class="help-title">Connect With Our Official Pages</h2>
+        <div class="help-grid">
+            <a href="https://www.facebook.com/profile.php?id=61567513587222" target="_blank" rel="noopener" class="help-card">
+                <div class="help-media">
+                    <img src="./dept.jpg" alt="Department of BECM, RUET" class="help-pic" loading="lazy">
+                </div>
+                <h3 class="help-name">Department of BECM, RUET</h3>
+                <span class="help-sub">Official Department Page</span>
+            </a>
+            <a href="https://www.facebook.com/profile.php?id=61579983149325" target="_blank" rel="noopener" class="help-card">
+                <div class="help-media">
+                    <img src="./24.jpg" alt="BECM' 24 RUET" class="help-pic" loading="lazy">
+                </div>
+                <h3 class="help-name">BECM' 24 RUET</h3>
+                <span class="help-sub">Authorized Platform of BECM '24</span>
+            </a>
+        </div>
+    </section>
+
+    <footer>BECM-24 &middot; Rajshahi University of Engineering &amp; Technology</footer>
+    <script>
+        (function () {
+            var ICON = '<svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg>';
+            var CHECK = '<svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+            function fallbackCopy(text) {
+                var ta = document.createElement('textarea');
+                ta.value = text;
+                ta.setAttribute('readonly', '');
+                ta.style.position = 'fixed';
+                ta.style.opacity = '0';
+                document.body.appendChild(ta);
+                ta.select();
+                var ok = false;
+                try { ok = document.execCommand('copy'); } catch (e) {}
+                document.body.removeChild(ta);
+                return ok;
+            }
+            function copyText(text) {
+                if (navigator.clipboard && window.isSecureContext) {
+                    return navigator.clipboard.writeText(text).then(function () { return true; }, function () { return fallbackCopy(text); });
+                }
+                return Promise.resolve(fallbackCopy(text));
+            }
+            document.addEventListener('click', function (e) {
+                var btn = e.target.closest('.btn-copy');
+                if (!btn) return;
+                copyText(btn.getAttribute('data-copy')).then(function (ok) {
+                    btn.innerHTML = ok ? CHECK : ICON;
+                    btn.classList.toggle('copied', ok);
+                    btn.setAttribute('title', ok ? 'Copied!' : 'Copy failed');
+                    clearTimeout(btn._t);
+                    btn._t = setTimeout(function () {
+                        btn.innerHTML = ICON;
+                        btn.classList.remove('copied');
+                        btn.setAttribute('title', 'Copy phone number');
+                    }, 1500);
+                });
+            });
+        })();
+    </script>
+
+    <script>
+        (function () {
+            var SALT = 'QTSVOTu/ET/pMfcC2vaFbg==', ITER = 300000;
+            var toggle = document.getElementById('unlockToggle');
+            var label = document.getElementById('unlockLabel');
+            var form = document.getElementById('unlockForm');
+            var input = document.getElementById('unlockCode');
+            var submit = document.getElementById('unlockSubmit');
+            var msg = document.getElementById('unlockMsg');
+            var calls = document.querySelectorAll('.btn-call[data-enc]');
+            var unlocked = false;
+            document.body.classList.add('locked');
+
+            function b64(s) { var b = atob(s), a = new Uint8Array(b.length); for (var i = 0; i < b.length; i++) a[i] = b.charCodeAt(i); return a; }
+
+            function say(text, cls) { msg.className = 'unlock-msg ' + (cls || ''); msg.textContent = text; }
+
+            async function tryCode(code) {
+                var enc = new TextEncoder();
+                var base = await crypto.subtle.importKey('raw', enc.encode(code), 'PBKDF2', false, ['deriveKey']);
+                var key = await crypto.subtle.deriveKey({ name: 'PBKDF2', salt: b64(SALT), iterations: ITER, hash: 'SHA-256' }, base, { name: 'AES-GCM', length: 256 }, false, ['decrypt']);
+                var nums = [];
+                for (var i = 0; i < calls.length; i++) {
+                    var raw = b64(calls[i].getAttribute('data-enc'));
+                    var pt = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: raw.slice(0, 12) }, key, raw.slice(12));
+                    nums.push(new TextDecoder().decode(pt));
+                }
+                return nums;
+            }
+
+            function reveal(nums) {
+                unlocked = true;
+                document.body.classList.remove('locked');
+                calls.forEach(function (a, i) {
+                    var n = nums[i];
+                    a.setAttribute('href', 'tel:+88' + n);
+                    a.querySelector('.num').textContent = n;
+                    a.classList.remove('masked');
+                    var cp = a.parentNode.querySelector('.btn-copy');
+                    if (cp) { cp.setAttribute('data-copy', n); cp.setAttribute('aria-label', 'Copy phone number ' + n); }
+                    a.removeAttribute('data-enc');
+                });
+                form.classList.remove('open');
+                label.textContent = 'Phone numbers unlocked';
+                toggle.disabled = true;
+                say('Unlocked \u2713', 'ok');
+            }
+
+            toggle.addEventListener('click', function () {
+                if (unlocked) return;
+                form.classList.toggle('open');
+                if (form.classList.contains('open')) input.focus();
+            });
+
+            form.addEventListener('submit', async function (e) {
+                e.preventDefault();
+                var code = input.value.trim();
+                if (!code) return;
+                if (!(window.crypto && crypto.subtle)) { say('Needs https:// or localhost to unlock.', 'err'); return; }
+                submit.disabled = true; say('Checking\u2026');
+                try {
+                    reveal(await tryCode(code));
+                } catch (err) {
+                    input.classList.remove('error'); void input.offsetWidth; input.classList.add('error');
+                    say('Wrong code. Try again.', 'err'); input.select();
+                }
+                submit.disabled = false;
+            });
+        })();
+    </script>
+</body>
+</html>
